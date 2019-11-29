@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-app-deployment
+  namespace: flask-prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-app-deployment
+  template:
+    metadata:
+      labels:
+        app: flask-app-deployment
+    spec:
+      containers:
+      - name: flask-app-deployment
+        image: flask-app:v1.1
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5000
+        # livenessProbe:
+        #   httpGet:
+        #     path: /
+        #     port: 80
+        #   initialDelaySeconds: 5
+        #   periodSeconds: 5
+        # readinessProbe:
+        #   httpGet:
+        #     path: /
+        #     port: 80
+        #   initialDelaySeconds: 5
+        #   periodSeconds: 5
+      volumes:
+      - name: flask-app-volume
+        persistentVolumeClaim:
+          claimName: flask-app-storage
